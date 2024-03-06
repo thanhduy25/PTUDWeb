@@ -6,7 +6,8 @@ const ApiError = require("./app/api-error");
 
 const app = express();
 
-
+app.use(cors());
+app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 // handle 404 response
 app.use((req, res, next) => {
@@ -15,7 +16,7 @@ app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));
 });
 // define error-handling middleware last, after other app.use() and routes calls
-app.use((err, req, res, next) => {
+app.use((error, req, res, next) => {
 // Middleware xử lý lỗi tập trung.
 // Trong các đoạn code xử lý ở các route, gọi next(error)
 // sẽ chuyển về middleware xử lý lỗi này
@@ -24,14 +25,13 @@ app.use((err, req, res, next) => {
         });
 });
 
-// app.use(cors());
-// app.use(express.json());
+
 
 // app.get("/",(req,res) => {
 //     res.json({ message: "Welcome to contact book applicaton"});
 // });
 
 
-// app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactsRouter);
 
 module.exports = app;
